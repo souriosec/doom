@@ -82,3 +82,6 @@
 
 ;; Python
 (setq lsp-pyright-venv-path nil)  ; Ensure LSP finds Python from the uv environment.
+
+;; Themes
+(setq doom-themes-enable-italic nil) ; Disable italics on doom themes.
