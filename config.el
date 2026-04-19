@@ -85,3 +85,27 @@
 
 ;; Themes
 (setq doom-themes-enable-italic nil) ; Disable italics on doom themes.
+
+;; Font
+(setq doom-font (font-spec :size 16))
+
+;; Enable copy, pasting, and in-line viewing snippets
+(use-package! org-download
+  :after org
+  :config
+  (defun my/set-org-download-dir ()
+    (when (buffer-file-name)
+      (setq-local org-download-image-dir
+                  (expand-file-name
+                   "images"
+                   (file-name-sans-extension (buffer-file-name))))))
+
+  (add-hook 'org-mode-hook #'my/set-org-download-dir)
+
+  (setq org-download-method             'directory
+        org-download-heading-lvl         nil
+        org-download-screenshot-method  "spectacle -n -b -o %s")
+
+  (map! :map org-mode-map
+        :localleader
+        "P" #'org-download-clipboard))
