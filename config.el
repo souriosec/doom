@@ -42,6 +42,23 @@
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
 
+;; C/C++ indentation settings
+(setq c-basic-offset 4)
+(setq c-ts-mode-indent-offset 4)
+(setq c++-ts-mode-indent-offset 4)
+
+;; Fix project root detection for C/C++ projects
+;; Doom uses Projectile for project detection, which checks certain files
+;; to determine project roots. By default it finds .git in parent directories
+;; before checking for project-specific files like CMakeLists.txt.
+;; We add these to projectile-project-root-files-bottom-up so they're
+;; checked BEFORE .git, ensuring subdirectory projects are recognized.
+(after! projectile
+  ;; Add to bottom-up list so these are checked before .git
+  (add-to-list 'projectile-project-root-files-bottom-up ".clangd")
+  (add-to-list 'projectile-project-root-files-bottom-up "CMakeLists.txt")
+  (add-to-list 'projectile-project-root-files-bottom-up "compile_commands.json")
+  (add-to-list 'projectile-project-root-files-bottom-up ".project"))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
@@ -74,14 +91,22 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 ;;
-;; ----------------
-;; ----------------
-;; -- My Configs --
-;; ----------------
-;; ----------------
+;; Configure eglot to use ty as the LSP server
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs
+               '(python-base-mode . ("ty" "server")))
+  ;; Disable inlay hints globally for all Eglot managed buffers
+  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
 
-;; Python
-(setq lsp-pyright-venv-path nil)  ; Ensure LSP finds Python from the uv environment.
+;; Use ruff for formatting via Apheleia
+(with-eval-after-load 'apheleia
+  (setf (alist-get 'python-mode apheleia-mode-alist)
+        '(ruff-isort ruff))
+  (setf (alist-get 'python-ts-mode apheleia-mode-alist)
+        '(ruff-isort ruff)))
+
+;; Limit eldoc to single line (truncate long function signatures)
+(setq eldoc-echo-area-use-multiline-p nil)
 
 ;; Themes
 (setq doom-themes-enable-italic nil) ; Disable italics on doom themes.
