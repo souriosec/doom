@@ -54,3 +54,4 @@
 ;; (unpin! t)
 ;;
 (package! org-download)
+(package! gruvbox-theme)

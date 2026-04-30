@@ -101,11 +101,11 @@
        lookup              ; navigate your code and its documentation
        ;;llm               ; when I said you needed friends, I didn't mean...
        ;;(lsp +eglot)      ; M-x vscode
-        (lsp +eglot)        ; M-x vscode (using eglot)
-       magit             ; a git porcelain for Emacs
+       (lsp +eglot)        ; M-x vscode (using eglot)
+       magit               ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
-       pdf               ; pdf enhancements
+       pdf                 ; pdf enhancements
        ;;terraform         ; infrastructure as code
        ;;tmux              ; an API for interacting with tmux
        tree-sitter         ; syntax and parsing, sitting in a tree...
@@ -159,7 +159,7 @@
        ;;nix               ; I hereby declare "nix geht mehr!"
        ;;ocaml             ; an objective camel
        ;;odin              ; C, minus its footguns
-       (org +pretty)       ; organize your plain life in plain text
+       (org +pretty)                 ; organize your plain life in plain text
        ;;php               ; perl's insecure younger brother
        ;;plantuml          ; diagrams for confusing people more
        ;;graphviz          ; diagrams for confusing yourself even more
