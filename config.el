@@ -138,7 +138,3 @@
   (map! :map org-mode-map
         :localleader
         "P" #'org-download-clipboard))
-
-;; Set default shell to fish
-(setq-default vterm-shell "/usr/bin/fish")
-(setq-default explicit-shell-file-name "/usr/bin/fish")
