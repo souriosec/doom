@@ -57,6 +57,14 @@
 (after! org
   (setq org-startup-with-link-previews t)
 
+  ;; Org ships C babel as ob-C.el (feature `ob-C'), not ob-c.
+  ;; `#+begin_src c` otherwise makes Doom (require 'ob-c); on macOS that
+  ;; loads ob-C.elc and then errors because the file provides `ob-C'.
+  (add-to-list 'org-src-lang-modes '("c" . c))
+  (after! ob-C
+    (defalias 'org-babel-execute:c #'org-babel-execute:C)
+    (defalias 'org-babel-expand-body:c #'org-babel-expand-body:C))
+
   (defadvice! +org--yank-image-preview-a (fn &rest args)
     "Insert clipboard images as description-less links and preview them."
     :around #'org--image-yank-media-handler
