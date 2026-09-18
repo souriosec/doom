@@ -163,7 +163,13 @@
 ;; Setup agent-shell
 (require 'acp)
 (require 'agent-shell)
-(setq agent-shell-preferred-agent-config 'grok-build)
+(require 'agent-shell-openai)
+(setq agent-shell-openai-authentication
+      (agent-shell-openai-make-authentication :login t)
+      ;; The ACP bridge is installed under ~/.local via npm.
+      agent-shell-openai-codex-acp-command
+      '("/home/rio/.local/node_modules/.bin/codex-acp")
+      agent-shell-preferred-agent-config 'codex)
 (use-package agent-shell
   :config
   ;; Evil state-specific RET behavior: insert mode = newline, normal mode = send
