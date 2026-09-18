@@ -129,8 +129,8 @@
   (map! :map org-mode-map
         :localleader
         (:prefix ("a" . "attachments")
-         "p" #'yank-media
-         "k" #'+org/delete-attachment-at-point)))
+                 "p" #'yank-media
+                 "k" #'+org/delete-attachment-at-point)))
 
 (after! evil-org
   (map! :map evil-org-mode-map
@@ -160,6 +160,21 @@
     :after #'Man-cleanup-manpage
     (ansi-osc-filter-region (point-min) (point-max))))
 
+;; Setup agent-shell
+(require 'acp)
+(require 'agent-shell)
+(setq agent-shell-preferred-agent-config 'grok-build)
+(use-package agent-shell
+  :config
+  ;; Evil state-specific RET behavior: insert mode = newline, normal mode = send
+  (evil-define-key 'insert agent-shell-mode-map (kbd "RET") #'newline)
+  (evil-define-key 'normal agent-shell-mode-map (kbd "RET") #'comint-send-input)
+
+  ;; Configure *agent-shell-diff* buffers to start in Emacs state
+  (add-hook 'diff-mode-hook
+            (lambda ()
+              (when (string-match-p "\\*agent-shell-diff\\*" (buffer-name))
+                (evil-emacs-state)))))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
