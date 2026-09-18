@@ -139,6 +139,12 @@
 (setq org-roam-directory (file-truename "~/roam-notes")
       org-attach-id-dir (expand-file-name ".attach/" org-roam-directory))
 
+
+;; Ensure emacs handles fish shell
+(setq shell-file-name (executable-find "bash"))
+(setq-default vterm-shell "/usr/bin/fish")
+(setq-default explicit-shell-file-name "/usr/bin/fish")
+
 ;; Emacs 31.1 man.el does not interpret groff 1.24 OSC 8 hyperlinks.
 (after! man
   (require 'ansi-osc)
