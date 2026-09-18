@@ -55,3 +55,7 @@
 (package! shell-maker)
 (package! acp)
 (package! agent-shell)
+
+;; Doom's pinned gptel revision double-encodes the ChatGPT OAuth redirect URI.
+;; Keep the fixed upstream revision from being reset to Doom's older package pin.
+(unpin! gptel)

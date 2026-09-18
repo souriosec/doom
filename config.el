@@ -176,6 +176,29 @@
               (when (string-match-p "\\*agent-shell-diff\\*" (buffer-name))
                 (evil-emacs-state)))))
 
+;; ChatGPT Plus through gptel's OAuth backend.  This uses the ChatGPT
+;; subscription rather than an OpenAI API key.
+(after! gptel
+  (require 'gptel-openai-oauth)
+
+  ;; Do not retain prompts, responses, or authentication headers in gptel's
+  ;; debug buffer.
+  (setq gptel-log-level nil
+        gptel-model 'gpt-5.6-sol
+        gptel-openai-oauth-login-method 'authorization-code
+        gptel-backend (gptel-make-openai-oauth "ChatGPT"))
+
+  ;; gptel stores the refreshable OAuth token in Emacs's cache.  Ensure that
+  ;; only this user can read it, regardless of the process umask.
+  (defun +gptel--secure-openai-oauth-token-a (file _token)
+    (when (equal (expand-file-name file)
+                 (expand-file-name gptel--openai-oauth-token-file))
+      (set-file-modes file #o600)))
+  (unless (advice-member-p #'+gptel--secure-openai-oauth-token-a
+                            'gptel-oauth--write-token)
+    (advice-add 'gptel-oauth--write-token :after
+                #'+gptel--secure-openai-oauth-token-a)))
+
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `with-eval-after-load' block, otherwise Doom's defaults may override your
 ;; settings. E.g.
