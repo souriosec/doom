@@ -182,9 +182,9 @@
 (require 'agent-shell-openai)
 (setq agent-shell-openai-authentication
       (agent-shell-openai-make-authentication :login t)
-      ;; The ACP bridge is installed under ~/.local via npm.
+      ;; Resolve the bridge through the login-session PATH.
       agent-shell-openai-codex-acp-command
-      '("/home/rio/.local/node_modules/.bin/codex-acp")
+      '("codex-acp")
       agent-shell-preferred-agent-config 'codex)
 (use-package agent-shell
   :config
