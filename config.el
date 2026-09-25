@@ -55,6 +55,7 @@
 (setq org-directory "~/org/")
 
 (after! org
+  (setq org-agenda-files '("~/org/agenda.org"))
   (setq org-startup-with-link-previews t)
 
   ;; Org ships C babel as ob-C.el (feature `ob-C'), not ob-c.
@@ -139,6 +140,21 @@
 (setq org-roam-directory (file-truename "~/roam-notes")
       org-attach-id-dir (expand-file-name ".attach/" org-roam-directory))
 
+(use-package! websocket
+  :after org-roam)
+
+(use-package! org-roam-ui
+  :after org-roam ;; or :after org
+  ;;         normally we'd recommend hooking orui after org-roam, but since org-roam does not have
+  ;;         a hookable mode anymore, you're advised to pick something yourself
+  ;;         if you don't care about startup time, use
+  ;;  :hook (after-init . org-roam-ui-mode)
+  :config
+  (setq org-roam-ui-sync-theme t
+        org-roam-ui-follow t
+        org-roam-ui-update-on-save t
+        org-roam-ui-open-on-start t))
+
 
 ;; Ensure emacs handles fish shell
 (setq shell-file-name (executable-find "bash"))
@@ -201,7 +217,7 @@
                  (expand-file-name gptel--openai-oauth-token-file))
       (set-file-modes file #o600)))
   (unless (advice-member-p #'+gptel--secure-openai-oauth-token-a
-                            'gptel-oauth--write-token)
+                           'gptel-oauth--write-token)
     (advice-add 'gptel-oauth--write-token :after
                 #'+gptel--secure-openai-oauth-token-a)))
 
