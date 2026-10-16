@@ -50,6 +50,18 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type 'relative)
 
+(defun +lua-eglot-contact (&optional _interactive)
+  "Find LuaLS on PATH, falling back to the existing Mason installation."
+  (let ((mason-server
+         (expand-file-name "~/.local/share/nvim/mason/bin/lua-language-server")))
+    (list (or (executable-find "lua-language-server")
+              (and (file-executable-p mason-server) mason-server)
+              (user-error "Install lua-language-server or restore the Mason installation")))))
+
+;; Use the packaged LuaLS launcher rather than Doom's source-build arguments.
+(after! lua-mode
+  (set-eglot-client! 'lua-mode #'+lua-eglot-contact))
+
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
