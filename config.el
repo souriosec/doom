@@ -46,15 +46,12 @@
 ;; If you want more pro-active theme switching based on OS light/dark mode, look
 ;; up the `auto-dark' package.
 
-;; Keep red underlines for misspellings, but hide Flyspell's yellow duplicate
-;; markers.  This also hides duplicate overlays that existed before the option
-;; below was applied (e.g. in an already-generated Org agenda buffer).
-(after! flyspell
-  (setq-default flyspell-mark-duplications-flag nil)
-  (defun +flyspell-hide-duplicate-markers-h ()
-    (set-face-attribute 'flyspell-duplicate nil :underline nil))
-  (+flyspell-hide-duplicate-markers-h)
-  (add-hook 'doom-load-theme-hook #'+flyspell-hide-duplicate-markers-h))
+;; Do not show LSP inlay (inline) hints in any language.
+(after! lsp-mode
+  (setq lsp-inlay-hint-enable nil))
+
+(after! eglot
+  (add-to-list 'eglot-ignored-server-capabilities :inlayHintProvider))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
